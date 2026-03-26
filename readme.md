@@ -1,6 +1,6 @@
 # 📋 XP Concursos — Progresso do Projeto
 
-> Documento de acompanhamento do desenvolvimento. Atualizado conforme o projeto avança.
+> Documento de acompanhamento do desenvolvimento.
 
 ---
 

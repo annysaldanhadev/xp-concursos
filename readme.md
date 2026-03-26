@@ -4,9 +4,9 @@
 
 ---
 
-## ✅ Concluído
+## Concluído
 
-### 📐 Design (Figma)
+### Design (Figma)
 - Identidade visual definida (dark theme, roxo #7C3AED, tipografia clean)
 - Tela Splash
 - Tela Login
@@ -17,13 +17,13 @@
 - Fluxo de criação de grupo (Desafio e Concurseiros)
 - Protótipo de navegação em andamento
 
-### 💻 Desenvolvimento
+### Desenvolvimento
 - Repositório GitHub criado
 - Projeto Expo + TypeScript iniciado
 - Estrutura de pastas organizada (`screens/auth`, `screens/tabs`, etc.)
 - `LoginScreen.tsx` criado e adaptado para a identidade visual do app
 
-### 📋 Gestão
+### Gestão
 - Escopo do projeto definido
 - Regras de negócio documentadas
 - Backlog criado no Trello
@@ -32,20 +32,19 @@
 
 ---
 
-## 🔄 Em andamento
+## Em andamento
 
 ### Sprint 1 — Fundação
 | Task | Responsável | Status |
 |------|-------------|--------|
-| Configuração do Firebase (Auth, Firestore, Storage) | Davi | 🔄 |
-| Estrutura do Firestore (users, groups, sessions) | Denny | 🔄 |
-| React Navigation | Vitor | 🔄 |
-| Componentes base (botão, input, cards) | Anny | 🔄 |
-| Tela Login + Cadastro | Pedro | 🔄 |
-
+| Configuração do Firebase (Auth, Firestore, Storage) | Davi |
+| Estrutura do Firestore (users, groups, sessions) | Denny |
+| React Navigation | Vitor |
+| Componentes base (botão, input, cards) | Anny |
+| Tela Login + Cadastro | Pedro |
 ---
 
-## 📅 Próximos Sprints
+## Próximos Sprints
 
 | Sprint | Foco | Período |
 |--------|------|---------|
@@ -57,7 +56,7 @@
 
 ---
 
-## 👥 Equipe
+## Equipe
 
 | Membro | Foco no Sprint 1 |
 |--------|-----------------|
@@ -69,7 +68,7 @@
 
 ---
 
-## 🛠️ Stack
+## Stack
 
 - React Native + Expo + TypeScript
 - Firebase (Auth, Firestore, Storage, Cloud Functions)

@@ -6,6 +6,20 @@ import {
   TextInput,
   TouchableOpacity,
 } from "react-native";
+import { useNavigation } from "@react-navigation/native";
+import { NativeStackNavigationProp } from "@react-navigation/native-stack";
+
+type NavigationProps = NativeStackNavigationProp<
+  {
+    Login: undefined;
+    Register: undefined;
+    RecoverPassword: undefined;
+    UpdatePassword: undefined;
+  },
+  "Login"
+>;
+
+const navigation = useNavigation<NavigationProps>();
 
 // SVG icons
 import EmailIcon from "../../assets/email.svg";
@@ -14,6 +28,7 @@ import EyeIcon from "../../assets/eye.svg";
 import GoogleIcon from "../../assets/google.svg";
 import AppleIcon from "../../assets/apple.svg";
 import LogoXp from "../../assets/logoxp.svg";
+
 
 export default function LoginScreen() {
   return (
@@ -89,9 +104,12 @@ export default function LoginScreen() {
       {/* CADASTRO */}
       <View style={styles.registerRow}>
         <Text style={styles.registerText}>Não tem conta?</Text>
-        <Text style={styles.registerLink}> Cadastre-se</Text>
-      </View>
+        
+       <TouchableOpacity onPress={() => navigation.navigate("RegisterScreen")}>
+          <Text style={styles.registerLink}> Cadastre-se</Text>
+       </TouchableOpacity>
 
+      </View>
     </View>
   );
 }

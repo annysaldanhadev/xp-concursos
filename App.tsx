@@ -1,7 +1,7 @@
 import { useFonts } from "expo-font";
 import { Inter_400Regular, Inter_700Bold } from "@expo-google-fonts/inter";
 
-import LoginScreen from "./src/screens/LoginScreen";
+import AppNavigator from "./src/navigation/AppNavigator";
 
 export default function App() {
   const [fontsLoaded] = useFonts({
@@ -13,5 +13,5 @@ export default function App() {
     return null;
   }
 
-  return <LoginScreen />;
+  return <AppNavigator />;
 }

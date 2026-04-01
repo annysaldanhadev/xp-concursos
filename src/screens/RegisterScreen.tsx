@@ -3,6 +3,10 @@ import { View, Text, TextInput, TouchableOpacity, StyleSheet } from "react-nativ
 import { useNavigation } from "@react-navigation/native";
 import { auth } from "../services/firebaseConfig";
 import { createUserWithEmailAndPassword } from "firebase/auth";
+import LogoXP from "../../assets/logoxp.svg";
+import EmailIcon from "../../assets/email.svg";
+import LockIcon from "../../assets/lock.svg";
+import EyeIcon from "../../assets/eye.svg";
 
 export default function RegisterScreen() {
 
@@ -11,8 +15,16 @@ export default function RegisterScreen() {
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [showPassword, setShowPassword] = useState(false);
+  const [error, setError] = useState("");
 
   const handleRegister = async () => {
+    setError("");
+
+    if (!name || !email || !password) {
+      setError("Preencha todos os campos para se cadastrar.");
+      return;
+    }
 
     try {
 
@@ -31,6 +43,10 @@ export default function RegisterScreen() {
   return (
     <View style={styles.container}>
 
+      <View style={{ alignItems: "center", marginBottom: 30 }}>
+        <LogoXP width={200} height={80} />
+      </View>
+
       <Text style={styles.title}>Criar conta</Text>
 
       <Text style={styles.subtitle}>
@@ -41,40 +57,54 @@ export default function RegisterScreen() {
 
         <Text style={styles.label}>Nome Completo</Text>
 
-        <TextInput
-          placeholder="Digite seu nome"
-          placeholderTextColor="#7A8597"
-          style={styles.input}
-          value={name}
-          onChangeText={setName}
-        />
+        <View style={styles.inputWrapper}>
+          <EmailIcon width={18} height={18} style={styles.inputIcon} />
+          <TextInput
+            placeholder="Digite seu nome"
+            placeholderTextColor="#7A8597"
+            style={styles.inputWithIcon}
+            value={name}
+            onChangeText={setName}
+          />
+        </View>
 
         <Text style={styles.label}>E-mail</Text>
 
-        <TextInput
-          placeholder="seu@email.com"
-          placeholderTextColor="#7A8597"
-          style={styles.input}
-          value={email}
-          onChangeText={setEmail}
-        />
+        <View style={styles.inputWrapper}>
+          <EmailIcon width={18} height={18} style={styles.inputIcon} />
+          <TextInput
+            placeholder="seu@email.com"
+            placeholderTextColor="#7A8597"
+            style={styles.inputWithIcon}
+            value={email}
+            onChangeText={setEmail}
+          />
+        </View>
 
         <Text style={styles.label}>Senha</Text>
 
-        <TextInput
-          placeholder="Digite sua senha"
-          placeholderTextColor="#7A8597"
-          secureTextEntry
-          style={styles.input}
-          value={password}
-          onChangeText={setPassword}
-        />
+        <View style={styles.inputWrapper}>
+          <LockIcon width={18} height={18} style={styles.inputIcon} />
+          <TextInput
+            placeholder="Digite sua senha"
+            placeholderTextColor="#7A8597"
+            secureTextEntry={!showPassword}
+            style={styles.inputWithIcon}
+            value={password}
+            onChangeText={setPassword}
+          />
+          <TouchableOpacity onPress={() => setShowPassword(!showPassword)}>
+            <EyeIcon width={18} height={18} style={styles.inputIcon} />
+          </TouchableOpacity>
+        </View>
 
-       <TouchableOpacity 
-        style={styles.button}
-        onPress={handleRegister}>
-        <Text style={styles.buttonText}>Criar conta</Text>
-      </TouchableOpacity>
+        {error ? <Text style={styles.errorText}>{error}</Text> : null}
+
+        <TouchableOpacity
+          style={styles.button}
+          onPress={handleRegister}>
+          <Text style={styles.buttonText}>Criar conta</Text>
+        </TouchableOpacity>
 
       </View>
 
@@ -121,13 +151,23 @@ const styles = StyleSheet.create({
     marginBottom: 6
   },
 
-  input: {
+  inputWrapper: {
+    flexDirection: "row",
+    alignItems: "center",
     backgroundColor: "#2A3142",
-    height: 50,
     borderRadius: 10,
     paddingHorizontal: 15,
+    marginBottom: 15,
+    height: 50,
+  },
+
+  inputIcon: {
+    marginRight: 10,
+  },
+
+  inputWithIcon: {
+    flex: 1,
     color: "white",
-    marginBottom: 15
   },
 
   button: {
@@ -153,6 +193,12 @@ const styles = StyleSheet.create({
 
   link: {
     color: "#8B5CF6"
+  },
+
+  errorText: {
+    color: "#EF4444",
+    fontSize: 13,
+    marginBottom: 10,
   }
 
 });

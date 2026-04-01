@@ -1,6 +1,12 @@
 import React, { useState } from "react";
-import {View, Text, TextInput, TouchableOpacity, StyleSheet, Alert
+import {View, Text, TextInput, TouchableOpacity, StyleSheet
 } from "react-native";
+import LogoXP from "../../assets/logoxp.svg";
+import EmailIcon from "../../assets/email.svg";
+import LockIcon from "../../assets/lock.svg";
+import EyeIcon from "../../assets/eye.svg";
+import GoogleIcon from "../../assets/google.svg";
+import AppleIcon from "../../assets/apple.svg";
 
 import { useNavigation } from "@react-navigation/native";
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
@@ -24,21 +30,31 @@ export default function LoginScreen() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
+  const [error, setError] = useState("");
+  const [showPassword, setShowPassword] = useState(false);
 
   const handleLogin = async () => {
+    setError("");
+
     if (!email || !password) {
-      Alert.alert("Erro", "Por favor, preencha e-mail e senha");
+      setError("Por favor, preencha e-mail e senha.");
       return;
     }
 
     setLoading(true);
     try {
       await signInWithEmailAndPassword(auth, email, password);
-      console.log("Login realizado!");
       navigation.navigate("Login");
-    } catch (error: any) {
-      console.log("Erro no login:", error);
-      Alert.alert("Erro no Login", error.message || "Falha ao realizar login");
+    } catch (e: any) {
+      if (e.code === "auth/invalid-credential" || e.code === "auth/wrong-password") {
+        setError("E-mail ou senha incorretos.");
+      } else if (e.code === "auth/user-not-found") {
+        setError("Nenhuma conta encontrada com esse e-mail.");
+      } else if (e.code === "auth/too-many-requests") {
+        setError("Muitas tentativas. Tente novamente mais tarde.");
+      } else {
+        setError("Erro ao entrar. Tente novamente.");
+      }
     } finally {
       setLoading(false);
     }
@@ -47,7 +63,10 @@ export default function LoginScreen() {
   return (
     <View style={styles.container}>
       {/* LOGO */}
-      <Text style={styles.logo}>XP Concursos</Text>
+
+      <View style={{ alignItems: "center", marginBottom: 30 }}>
+      <LogoXP width={200} height={80} />
+      </View>
 
       <Text style={styles.title}>Login</Text>
 
@@ -56,14 +75,17 @@ export default function LoginScreen() {
 
         <Text style={styles.label}>E-mail</Text>
 
-        <TextInput
-          placeholder="seu@email.com"
-          placeholderTextColor="#8C94A7"
-          style={styles.input}
-          value={email}
-          onChangeText={setEmail}
-          editable={!loading}
-        />
+        <View style={styles.inputWrapper}>
+          <EmailIcon width={18} height={18} style={styles.inputIcon} />
+          <TextInput
+            placeholder="seu@email.com"
+            placeholderTextColor="#8C94A7"
+            style={styles.inputWithIcon}
+            value={email}
+            onChangeText={setEmail}
+            editable={!loading}
+          />
+        </View>
 
         <View style={styles.passwordHeader}>
           <Text style={styles.label}>Senha</Text>
@@ -75,15 +97,23 @@ export default function LoginScreen() {
           </TouchableOpacity>
         </View>
 
-        <TextInput
-          placeholder="Digite sua senha"
-          placeholderTextColor="#8C94A7"
-          secureTextEntry
-          style={styles.input}
-          value={password}
-          onChangeText={setPassword}
-          editable={!loading}
-        />
+        <View style={styles.inputWrapper}>
+          <LockIcon width={18} height={18} style={styles.inputIcon} />
+          <TextInput
+            placeholder="Digite sua senha"
+            placeholderTextColor="#8C94A7"
+            secureTextEntry={!showPassword}
+            style={styles.inputWithIcon}
+            value={password}
+            onChangeText={setPassword}
+            editable={!loading}
+          />
+          <TouchableOpacity onPress={() => setShowPassword(!showPassword)}>
+            <EyeIcon width={18} height={18} style={styles.inputIcon} />
+          </TouchableOpacity>
+        </View>
+
+        {error ? <Text style={styles.errorText}>{error}</Text> : null}
 
         {/* BOTÃO LOGIN */}
 
@@ -102,12 +132,14 @@ export default function LoginScreen() {
         {/* GOOGLE */}
 
         <TouchableOpacity style={styles.socialButton} disabled={loading}>
+          <GoogleIcon width={20} height={20} />
           <Text style={styles.socialText}>Continue com Google</Text>
         </TouchableOpacity>
 
         {/* APPLE */}
 
         <TouchableOpacity style={styles.socialButton} disabled={loading}>
+          <AppleIcon width={20} height={20} />
           <Text style={styles.socialText}>Continue com Apple</Text>
         </TouchableOpacity>
 
@@ -174,6 +206,25 @@ const styles = StyleSheet.create({
     marginBottom: 15
   },
 
+  inputWrapper: {
+    flexDirection: "row",
+    alignItems: "center",
+    backgroundColor: "#2A3142",
+    borderRadius: 10,
+    paddingHorizontal: 15,
+    marginBottom: 15,
+    height: 50,
+  },
+
+  inputIcon: {
+    marginRight: 10,
+  },
+
+  inputWithIcon: {
+    flex: 1,
+    color: "white",
+  },
+
   passwordHeader: {
     flexDirection: "row",
     justifyContent: "space-between",
@@ -214,9 +265,11 @@ const styles = StyleSheet.create({
     backgroundColor: "#2A3142",
     height: 45,
     borderRadius: 10,
+    flexDirection: "row",
     justifyContent: "center",
     alignItems: "center",
-    marginBottom: 10
+    marginBottom: 10,
+    gap: 10,
   },
 
   socialText: {
@@ -231,6 +284,12 @@ const styles = StyleSheet.create({
 
   registerLink: {
     color: "#8B5CF6"
+  },
+
+  errorText: {
+    color: "#EF4444",
+    fontSize: 13,
+    marginBottom: 10,
   }
 
 });

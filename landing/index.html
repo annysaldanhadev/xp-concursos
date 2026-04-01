@@ -1,0 +1,652 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="XP Concursos — A plataforma gamificada de estudos para concursos públicos. Ganhe XP, suba de liga e estude mais com o método Pomodoro.">
+    <title>XP Concursos — Estude. Evolua. Vença.</title>
+
+    <!-- Fontes -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@400;500;600;700&family=Exo+2:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+    <!-- Estilos -->
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="animations.css">
+  </head>
+
+  <body>
+
+    <!-- Canvas de partículas (fundo fixo) -->
+    <canvas id="particles-canvas"></canvas>
+
+    <!-- ============================================================
+         NAVBAR
+    ============================================================ -->
+    <nav class="navbar" id="navbar">
+      <div class="nav-container">
+        <a href="#" class="nav-logo">
+          <span class="logo-icon">⚡</span>
+          <span class="logo-text">XP <span class="logo-accent">Concursos</span></span>
+        </a>
+
+        <ul class="nav-links">
+          <li><a href="#como-funciona">Como funciona</a></li>
+          <li><a href="#league-progress-section">Ligas</a></li>
+          <li><a href="#grupos">Comunidade</a></li>
+          <li><a href="#roadmap">Roadmap</a></li>
+        </ul>
+
+        <a href="#lista-espera" class="nav-cta">Entrar na lista</a>
+
+        <button class="nav-toggle" id="nav-toggle" aria-label="Abrir menu" aria-expanded="false">
+          <span></span>
+          <span></span>
+          <span></span>
+        </button>
+      </div>
+    </nav>
+
+    <!-- ============================================================
+         HERO
+    ============================================================ -->
+    <section class="hero section" id="hero">
+      <div class="hero-container">
+
+        <!-- Conteúdo — coluna esquerda -->
+        <div class="hero-content" data-animate="fade-right">
+          <div class="hero-badge">
+            <span class="badge-dot"></span>
+            Plataforma gamificada de estudos
+          </div>
+
+          <h1 class="hero-title">
+            <span class="title-line">Estude como um</span>
+            <span class="title-line accent">campeão de concurso</span>
+          </h1>
+
+          <p class="hero-subtitle">
+            Transforme suas horas de estudo em XP, suba de liga, dispute o ranking com outros concurseiros e conquiste badges exclusivos.
+            O método <strong>Pomodoro</strong> nunca foi tão viciante.
+          </p>
+
+          <!-- Contador XP (odômetro) -->
+          <div class="xp-counter-block">
+            <div class="xp-label">⚡ XP ACUMULADO PELA COMUNIDADE</div>
+            <div class="xp-value">
+              <span class="xp-number" id="xp-odometer">0</span>
+              <span class="xp-unit">XP</span>
+            </div>
+            <div class="xp-bar-wrap">
+              <div>
+                <div id="xp-bar" style="width: 0%"></div>
+              </div>
+              <span class="xp-bar-label">72% até o próximo marco</span>
+            </div>
+          </div>
+
+          <!-- Botões de ação -->
+          <div class="hero-actions">
+            <a href="#lista-espera" class="btn btn-primary btn-large">🚀 Entrar na lista de espera</a>
+            <a href="#como-funciona" class="btn btn-ghost btn-large">Ver como funciona</a>
+          </div>
+
+          <!-- Mini estatísticas -->
+          <div class="hero-stats">
+            <div class="hero-stat">
+              <span class="stat-num" data-target="8400">0</span>
+              <span class="stat-label">concurseiros ativos</span>
+            </div>
+            <div class="hero-stat-divider"></div>
+            <div class="hero-stat">
+              <span class="stat-num" data-target="320">0</span>
+              <span class="stat-label">horas estudadas hoje</span>
+            </div>
+            <div class="hero-stat-divider"></div>
+            <div class="hero-stat">
+              <span class="stat-num" data-target="1240">0</span>
+              <span class="stat-label">sessões concluídas</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Mockup do celular — coluna direita -->
+        <div class="hero-mockup" data-animate="fade-left">
+          <div class="mockup-glow"></div>
+          <div class="phone-frame">
+            <div class="phone-notch"></div>
+            <div class="phone-screen">
+              <div class="app-screen">
+
+                <!-- Cabeçalho do app -->
+                <div class="app-header">
+                  <div class="app-avatar">📚</div>
+                  <div>
+                    <div class="app-username">Ana Concurseira</div>
+                    <div class="app-level">🏅 Liga Veterano</div>
+                  </div>
+                  <div class="app-streak">
+                    <span class="streak-fire">🔥</span>
+                    <span class="streak-num">12</span>
+                  </div>
+                </div>
+
+                <!-- Barra de XP -->
+                <div class="app-xp-section">
+                  <div class="app-xp-label">
+                    <span>Nível 24</span>
+                    <span class="app-xp-val">4.820 / 5.000 XP</span>
+                  </div>
+                  <div class="app-xp-bar">
+                    <div class="app-xp-fill" style="width: 68%"></div>
+                  </div>
+                </div>
+
+                <!-- Timer Pomodoro -->
+                <div class="app-pomodoro">
+                  <div class="pomo-label">🍅 Direito Constitucional</div>
+                  <div class="pomo-ring">
+                    <svg viewBox="0 0 80 80">
+                      <circle class="pomo-bg" cx="40" cy="40" r="34"/>
+                      <circle
+                        class="pomo-progress"
+                        id="pomo-circle"
+                        cx="40" cy="40" r="34"
+                      />
+                    </svg>
+                    <span id="pomo-timer" class="pomo-time">25:00</span>
+                  </div>
+                  <button id="pomo-start" class="pomo-btn">▶ Iniciar</button>
+                </div>
+
+                <!-- Ranking mini -->
+                <div class="app-ranking-mini">
+                  <div class="rank-title">🏆 Ranking ao vivo</div>
+                  <div class="rank-item rank-first">
+                    <span class="rank-pos">1</span>
+                    <span class="rank-name">Carlos F.</span>
+                    <span class="rank-xp rp-xp">12.840 XP</span>
+                  </div>
+                  <div class="rank-item rank-second">
+                    <span class="rank-pos">2</span>
+                    <span class="rank-name">Ana C.</span>
+                    <span class="rank-xp rp-xp">11.230 XP</span>
+                  </div>
+                  <div class="rank-item">
+                    <span class="rank-pos">3</span>
+                    <span class="rank-name">Pedro M.</span>
+                    <span class="rank-xp rp-xp">10.875 XP</span>
+                  </div>
+                  <div class="rank-item rank-you">
+                    <span class="rank-pos">–</span>
+                    <span class="rank-name">Você</span>
+                    <span class="rank-xp">– XP</span>
+                  </div>
+                </div>
+
+              </div><!-- /.app-screen -->
+            </div><!-- /.phone-screen -->
+            <div class="phone-home-bar"></div>
+          </div><!-- /.phone-frame -->
+        </div><!-- /.hero-mockup -->
+
+      </div><!-- /.hero-container -->
+    </section>
+
+    <!-- ============================================================
+         SEÇÃO: O PROBLEMA
+    ============================================================ -->
+    <section class="section problema" id="problema">
+      <div class="container">
+        <div data-animate="fade-up">
+          <span class="section-label">O problema</span>
+          <h2 class="section-title">Por que 9 em cada 10<br><span class="accent">concurseiros desistem?</span></h2>
+          <p class="section-subtitle">Estudar sozinho, sem progresso visível e sem motivação é a receita para o abandono. Conheça os vilões da sua aprovação.</p>
+        </div>
+
+        <div class="problem-cards">
+          <div class="problem-card" data-animate="fade-up" data-delay="100">
+            <div class="card-icon">🏝️</div>
+            <h3 class="card-title">Estudo isolado</h3>
+            <p class="card-desc">Sem comunidade e sem comparação saudável, fica difícil manter o ritmo e perceber seu real progresso.</p>
+          </div>
+
+          <div class="problem-card card-featured" data-animate="scale-in">
+            <span class="card-featured-badge">Principal causa</span>
+            <div class="card-icon">😴</div>
+            <h3 class="card-title">Falta de consistência</h3>
+            <p class="card-desc">Estudar esporadicamente não constrói memória de longo prazo. Sem rotina estruturada, o conteúdo some em dias.</p>
+            <div style="margin-top: 20px;">
+              <span class="count-up" data-target="73" data-suffix="%" style="font-family: var(--font-title); font-size: 2rem; font-weight: 700; color: var(--purple-light);">0%</span>
+              <span style="font-size: 0.85rem; color: var(--text-muted); margin-left: 8px;">param nos primeiros 3 meses</span>
+            </div>
+          </div>
+
+          <div class="problem-card" data-animate="fade-up" data-delay="200">
+            <div class="card-icon">📊</div>
+            <h3 class="card-title">Sem métricas claras</h3>
+            <p class="card-desc">Como saber se você está evoluindo se não mede nada? A ausência de feedback desmotiva qualquer estudante.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============================================================
+         SEÇÃO: COMO FUNCIONA
+    ============================================================ -->
+    <section class="section como-funciona" id="como-funciona">
+      <div class="container">
+        <div data-animate="fade-up">
+          <span class="section-label">Como funciona</span>
+          <h2 class="section-title">Simples como <span class="accent">estudar e ganhar XP</span></h2>
+          <p class="section-subtitle">Em quatro passos, transformamos sua rotina de estudos em uma jornada de evolução constante.</p>
+        </div>
+
+        <div class="steps-grid">
+          <div class="step-card" data-animate="fade-up">
+            <div class="step-number">01</div>
+            <div class="step-icon-wrap">
+              <span class="step-icon">⏱️</span>
+            </div>
+            <h3 class="step-title">Inicie um Pomodoro</h3>
+            <p class="step-desc">Selecione a matéria, configure o timer (25 min) e foque. Cada sessão completa vale XP.</p>
+          </div>
+
+          <div class="step-card" data-animate="fade-up" data-delay="100">
+            <div class="step-number">02</div>
+            <div class="step-icon-wrap">
+              <span class="step-icon">⚡</span>
+            </div>
+            <h3 class="step-title">Ganhe XP</h3>
+            <p class="step-desc">Cada Pomodoro completado, streak mantido e meta batida gera XP. Quanto mais estuda, mais acumula.</p>
+          </div>
+
+          <div class="step-card" data-animate="fade-up" data-delay="200">
+            <div class="step-number">03</div>
+            <div class="step-icon-wrap">
+              <span class="step-icon">🏆</span>
+            </div>
+            <h3 class="step-title">Suba de liga</h3>
+            <p class="step-desc">Acumule XP e avance pelas ligas: Bronze, Prata, Ouro, Platina e Diamante. Cada liga tem recompensas exclusivas.</p>
+          </div>
+
+          <div class="step-card" data-animate="fade-up" data-delay="300">
+            <div class="step-number">04</div>
+            <div class="step-icon-wrap">
+              <span class="step-icon">👥</span>
+            </div>
+            <h3 class="step-title">Dispute o ranking</h3>
+            <p class="step-desc">Veja onde você está em relação aos outros. Forme grupos de estudo e motive seus amigos.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============================================================
+         SEÇÃO: GAMIFICAÇÃO (Ligas + Badges)
+    ============================================================ -->
+    <section class="section gamificacao" id="league-progress-section">
+      <div class="container">
+        <div data-animate="fade-up">
+          <span class="section-label">Sistema de ligas</span>
+          <h2 class="section-title">Evolua pelas <span class="accent">5 ligas</span> e prove seu valor</h2>
+          <p class="section-subtitle">De Bronze a Diamante, cada liga exige mais dedicação e recompensa com conquistas maiores.</p>
+        </div>
+
+        <!-- Ligas track -->
+        <div class="leagues-section" data-animate="scale-in">
+          <div class="leagues-label">Sua posição atual</div>
+
+          <div class="leagues-track">
+            <div class="league-item">
+              <div class="league-icon">🥉</div>
+              <span class="league-name">Bronze</span>
+            </div>
+            <div class="league-connector"></div>
+            <div class="league-item">
+              <div class="league-icon">🥈</div>
+              <span class="league-name">Prata</span>
+            </div>
+            <div class="league-connector"></div>
+            <div class="league-item">
+              <div class="league-icon">🥇</div>
+              <span class="league-name">Ouro</span>
+            </div>
+            <div class="league-connector"></div>
+            <div class="league-item">
+              <div class="league-icon">💎</div>
+              <span class="league-name">Veterano</span>
+            </div>
+            <div class="league-connector"></div>
+            <div class="league-item league-legendary">
+              <div class="league-icon">👑</div>
+              <span class="league-name">Diamante</span>
+            </div>
+          </div>
+
+          <div class="league-progress-wrap">
+            <div class="league-progress-bar">
+              <div id="league-fill" class="league-progress-fill" style="width: 0%"></div>
+              <div id="league-cursor" class="league-progress-cursor" style="left: 0%">⭐</div>
+            </div>
+            <div class="league-progress-labels">
+              <span>0 XP</span>
+              <span>2.000</span>
+              <span>5.000</span>
+              <span>10.000</span>
+              <span>20.000 XP</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Badges + Extras -->
+        <div class="gamification-extras">
+          <div class="extras-card" data-animate="fade-up">
+            <div class="extras-title">🏅 Conquistas disponíveis</div>
+            <div class="badges-grid">
+              <div class="badge-item badge-earned">
+                <span class="badge-emoji">🔥</span>
+                <span class="badge-name">Sequência 7</span>
+              </div>
+              <div class="badge-item badge-earned">
+                <span class="badge-emoji">⚡</span>
+                <span class="badge-name">Primeiro XP</span>
+              </div>
+              <div class="badge-item badge-earned">
+                <span class="badge-emoji">🍅</span>
+                <span class="badge-name">Pomo Mestre</span>
+              </div>
+              <div class="badge-item">
+                <span class="badge-emoji">🌅</span>
+                <span class="badge-name">Madrugador</span>
+              </div>
+              <div class="badge-item">
+                <span class="badge-emoji">💎</span>
+                <span class="badge-name">Diamante</span>
+              </div>
+              <div class="badge-item">
+                <span class="badge-emoji">🏆</span>
+                <span class="badge-name">Top 10</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="extras-card" data-animate="fade-up" data-delay="200">
+            <div class="extras-title">📊 Estatísticas da comunidade</div>
+            <div style="display: flex; flex-direction: column; gap: 20px; margin-top: 8px;">
+              <div>
+                <div style="font-family: var(--font-title); font-size: 2.4rem; font-weight: 700; color: var(--purple-light); line-height: 1;">
+                  <span class="count-up" data-target="3240" data-suffix="">0</span>
+                </div>
+                <div style="font-size: 0.88rem; color: var(--text-muted); margin-top: 4px;">concurseiros na Liga Ouro agora</div>
+              </div>
+              <div>
+                <div style="font-family: var(--font-title); font-size: 2.4rem; font-weight: 700; color: var(--purple-light); line-height: 1;">
+                  <span class="count-up" data-target="870" data-suffix="">0</span>
+                </div>
+                <div style="font-size: 0.88rem; color: var(--text-muted); margin-top: 4px;">já chegaram ao Diamante</div>
+              </div>
+              <div>
+                <div style="font-family: var(--font-title); font-size: 2.4rem; font-weight: 700; color: var(--purple-light); line-height: 1;">
+                  <span class="count-up" data-target="94" data-suffix="%">0%</span>
+                </div>
+                <div style="font-size: 0.88rem; color: var(--text-muted); margin-top: 4px;">recomendam para amigos</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============================================================
+         SEÇÃO: SOCIAL / COMUNIDADE
+    ============================================================ -->
+    <section class="section social" id="grupos">
+      <div class="container">
+        <div class="social-layout">
+
+          <!-- Coluna esquerda: features -->
+          <div class="social-features">
+            <div data-animate="fade-right">
+              <span class="section-label">Comunidade</span>
+              <h2 class="section-title">Estude junto,<br><span class="accent">evolua mais rápido</span></h2>
+              <p class="section-subtitle">Grupos de estudo com metas coletivas, XP compartilhado e accountability real entre concurseiros sérios.</p>
+            </div>
+
+            <div class="social-feature" data-animate="fade-right" data-delay="100">
+              <div class="sf-icon">👥</div>
+              <div>
+                <h4>Grupos de estudo</h4>
+                <p>Crie ou entre em grupos temáticos (TRF, INSS, Policial) e estude com quem tem o mesmo objetivo.</p>
+              </div>
+            </div>
+            <div class="social-feature" data-animate="fade-right" data-delay="200">
+              <div class="sf-icon">🎯</div>
+              <div>
+                <h4>Metas coletivas</h4>
+                <p>Defina metas semanais com seu grupo. Se todos cumprirem, todos ganham XP bônus.</p>
+              </div>
+            </div>
+            <div class="social-feature" data-animate="fade-right" data-delay="300">
+              <div class="sf-icon">💬</div>
+              <div>
+                <h4>Accountability real</h4>
+                <p>Notificações do progresso dos colegas te mantêm na linha. Ninguém quer ficar para trás.</p>
+              </div>
+            </div>
+            <div class="social-feature" data-animate="fade-right" data-delay="400">
+              <div class="sf-icon">🏅</div>
+              <div>
+                <h4>Ranking de grupos</h4>
+                <p>Além do ranking individual, dispute com outros grupos pelo título de grupo mais dedicado da semana.</p>
+              </div>
+            </div>
+          </div>
+
+          <!-- Coluna direita: stats panel + ranking -->
+          <div class="social-stats-panel" data-animate="fade-left">
+            <div class="stats-panel-title">🏆 RANKING AO VIVO</div>
+
+            <div class="ranking-preview">
+              <div class="rp-title">Top concurseiros esta semana</div>
+              <div class="rp-row rp-gold">
+                <span class="rp-pos">🥇</span>
+                <span class="rp-user">Carlos Ferreira</span>
+                <span class="rp-xp">12.840 XP</span>
+              </div>
+              <div class="rp-row rp-silver">
+                <span class="rp-pos">🥈</span>
+                <span class="rp-user">Ana Concurseira</span>
+                <span class="rp-xp">11.230 XP</span>
+              </div>
+              <div class="rp-row rp-bronze">
+                <span class="rp-pos">🥉</span>
+                <span class="rp-user">Pedro Mota</span>
+                <span class="rp-xp">10.875 XP</span>
+              </div>
+              <div class="rp-divider">· · ·</div>
+              <div class="rp-row rp-you">
+                <span class="rp-pos">?</span>
+                <span class="rp-user">Você (entre na lista!)</span>
+                <span class="rp-xp" style="color: var(--text-muted);">– XP</span>
+              </div>
+            </div>
+
+            <div class="big-stat" style="margin-top: 28px;">
+              <div class="big-stat-number">
+                <span class="count-up" data-target="8400" data-suffix="+">0+</span>
+              </div>
+              <div class="big-stat-label">concurseiros já na lista de espera</div>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </section>
+
+    <!-- ============================================================
+         SEÇÃO: ROADMAP
+    ============================================================ -->
+    <section class="section roadmap" id="roadmap">
+      <div class="container">
+        <div class="roadmap-inner">
+          <span class="roadmap-badge">✅ Sprint 1 em andamento</span>
+          <h2 class="section-title">O que vem pela <span class="accent">frente</span></h2>
+          <p class="section-subtitle">Estamos construindo a melhor plataforma de estudos do Brasil. Acompanhe o progresso.</p>
+
+          <div class="roadmap-steps">
+            <div class="rm-step" data-animate="fade-up">
+              <div class="rm-step-icon">✅</div>
+              <div class="rm-connector"></div>
+              <div class="rm-step-content">
+                <h4>Design & Identidade</h4>
+                <p>Sistema de design, paleta de cores e componentes base definidos no Figma.</p>
+              </div>
+            </div>
+
+            <div class="rm-step" data-animate="fade-up" data-delay="100">
+              <div class="rm-step-icon">⚙️</div>
+              <div class="rm-connector"></div>
+              <div class="rm-step-content">
+                <h4>Autenticação & Base</h4>
+                <p>Login, cadastro, recuperação de senha e estrutura de navegação do app.</p>
+              </div>
+            </div>
+
+            <div class="rm-step" data-animate="fade-up" data-delay="200">
+              <div class="rm-step-icon">⏱️</div>
+              <div class="rm-connector"></div>
+              <div class="rm-step-content">
+                <h4>Timer + Sistema de XP</h4>
+                <p>Pomodoro funcional, cálculo de XP por sessão e streak diário.</p>
+              </div>
+            </div>
+
+            <div class="rm-step" data-animate="fade-up" data-delay="300">
+              <div class="rm-step-icon">🏆</div>
+              <div class="rm-connector"></div>
+              <div class="rm-step-content">
+                <h4>Ranking + Ligas + Badges</h4>
+                <p>Ranking global, ligas, grupos de estudo e sistema completo de conquistas.</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============================================================
+         SEÇÃO: CTA — Lista de espera
+    ============================================================ -->
+    <section class="section cta-section" id="lista-espera">
+      <div class="container">
+        <div class="cta-bg-glow"></div>
+        <div class="cta-inner" data-animate="scale-in">
+
+          <span class="cta-emoji">🚀</span>
+          <h2 class="cta-title">Seja um dos primeiros<br><span class="accent">a ter acesso</span></h2>
+          <p class="cta-subtitle">
+            Cadastre-se agora e garanta acesso antecipado com benefícios exclusivos: XP bônus, badge especial e liga VIP no lançamento.
+          </p>
+
+          <!-- Formulário de lista de espera -->
+          <form id="cta-form" class="cta-form" novalidate>
+            <div class="form-group">
+              <input
+                type="text"
+                id="cta-name"
+                name="name"
+                placeholder="Seu nome"
+                autocomplete="name"
+                required
+              >
+            </div>
+            <div class="form-group">
+              <input
+                type="email"
+                id="cta-email"
+                name="email"
+                placeholder="Seu melhor e-mail"
+                autocomplete="email"
+                required
+              >
+            </div>
+            <button type="submit" id="cta-submit" class="btn btn-primary btn-large" style="width: 100%; justify-content: center;">
+              <span id="btn-text">🚀 Entrar na lista de espera</span>
+            </button>
+          </form>
+
+          <!-- Mensagem de sucesso (oculta inicialmente) -->
+          <div id="cta-success" class="cta-success" style="display: none;">
+            <div class="success-icon">🎉</div>
+            <h3>Você está na lista!</h3>
+            <p>Obrigado por se cadastrar. Você receberá um e-mail assim que o app estiver disponível. Prepare-se para estudar como nunca! ⚡</p>
+            <span class="success-xp">+500 XP de bônus garantidos!</span>
+          </div>
+
+          <p class="form-note">Sem spam. Cancele quando quiser. Seus dados estão seguros.</p>
+
+          <div class="cta-perks">
+            <span>⚡ XP bônus no lançamento</span>
+            <span>🏅 Badge exclusivo de fundador</span>
+            <span>👑 Liga VIP por 30 dias</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============================================================
+         FOOTER
+    ============================================================ -->
+    <footer class="footer">
+      <div class="container">
+        <div class="footer-top">
+          <div>
+            <a href="#" class="nav-logo" style="display: inline-flex; margin-bottom: 0;">
+              <span class="logo-icon">⚡</span>
+              <span class="logo-text">XP <span class="logo-accent">Concursos</span></span>
+            </a>
+            <p class="footer-tagline">Estude. Evolua. Vença.</p>
+            <p class="footer-desc">A plataforma gamificada que transforma a preparação para concursos públicos em uma jornada de evolução constante.</p>
+          </div>
+
+          <div class="footer-links-col">
+            <h4>Plataforma</h4>
+            <ul>
+              <li><a href="#como-funciona">Como funciona</a></li>
+              <li><a href="#league-progress-section">Sistema de Ligas</a></li>
+              <li><a href="#grupos">Comunidade</a></li>
+              <li><a href="#roadmap">Roadmap</a></li>
+            </ul>
+          </div>
+
+          <div class="footer-links-col">
+            <h4>Acesso</h4>
+            <ul>
+              <li><a href="#lista-espera">Lista de espera</a></li>
+              <li><a href="#lista-espera">Acesso antecipado</a></li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="footer-bottom">
+          <p>© 2025 XP Concursos. Todos os direitos reservados.</p>
+          <p class="footer-sub">Feito com ⚡ para concurseiros que levam a sério.</p>
+        </div>
+      </div>
+    </footer>
+
+    <!-- Firebase SDK (em ordem, sem defer, para garantir carregamento sequencial) -->
+    <script src="/__/firebase/12.11.0/firebase-app-compat.js"></script>
+    <script src="/__/firebase/12.11.0/firebase-firestore-compat.js"></script>
+
+    <!-- Config Firebase (inicializa app + expõe `db`) -->
+    <script src="firebase-config.js"></script>
+
+    <!-- Scripts do app -->
+    <script src="animations.js"></script>
+    <script src="main.js"></script>
+
+  </body>
+</html>

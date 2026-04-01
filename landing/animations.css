@@ -1,0 +1,466 @@
+/* ============================================================
+   XP Concursos — animations.css
+   Todas as animações e efeitos de scroll
+   ============================================================ */
+
+/* ------ ANIMAÇÕES DE ENTRADA (Scroll-triggered) ------ */
+
+/* Estado inicial dos elementos animados — invisíveis e deslocados */
+[data-animate="fade-up"] {
+  opacity: 0;
+  transform: translateY(40px);
+  transition: opacity 0.7s cubic-bezier(0.4, 0, 0.2, 1),
+              transform 0.7s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+[data-animate="fade-left"] {
+  opacity: 0;
+  transform: translateX(50px);
+  transition: opacity 0.7s cubic-bezier(0.4, 0, 0.2, 1),
+              transform 0.7s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+[data-animate="fade-right"] {
+  opacity: 0;
+  transform: translateX(-50px);
+  transition: opacity 0.7s cubic-bezier(0.4, 0, 0.2, 1),
+              transform 0.7s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+[data-animate="scale-in"] {
+  opacity: 0;
+  transform: scale(0.9);
+  transition: opacity 0.6s cubic-bezier(0.4, 0, 0.2, 1),
+              transform 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* Estado ativo — elemento visível */
+[data-animate].animated {
+  opacity: 1;
+  transform: translateY(0) translateX(0) scale(1);
+}
+
+/* Delays de animação (aplicados via data-delay no HTML) */
+[data-delay="100"] { transition-delay: 0.1s; }
+[data-delay="200"] { transition-delay: 0.2s; }
+[data-delay="300"] { transition-delay: 0.3s; }
+[data-delay="400"] { transition-delay: 0.4s; }
+[data-delay="500"] { transition-delay: 0.5s; }
+[data-delay="600"] { transition-delay: 0.6s; }
+
+/* ------ GRADIENTE ANIMADO DO HERO ------ */
+.hero::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background:
+    radial-gradient(ellipse 60% 50% at 70% 40%, rgba(124, 58, 237, 0.12) 0%, transparent 60%),
+    radial-gradient(ellipse 40% 60% at 20% 70%, rgba(91, 33, 182, 0.08) 0%, transparent 60%);
+  pointer-events: none;
+  z-index: 0;
+  animation: hero-gradient-shift 8s ease-in-out infinite;
+}
+
+@keyframes hero-gradient-shift {
+  0%, 100% {
+    background:
+      radial-gradient(ellipse 60% 50% at 70% 40%, rgba(124, 58, 237, 0.12) 0%, transparent 60%),
+      radial-gradient(ellipse 40% 60% at 20% 70%, rgba(91, 33, 182, 0.08) 0%, transparent 60%);
+  }
+  33% {
+    background:
+      radial-gradient(ellipse 70% 60% at 65% 45%, rgba(124, 58, 237, 0.16) 0%, transparent 60%),
+      radial-gradient(ellipse 50% 40% at 30% 60%, rgba(167, 139, 250, 0.07) 0%, transparent 60%);
+  }
+  66% {
+    background:
+      radial-gradient(ellipse 55% 55% at 75% 35%, rgba(91, 33, 182, 0.14) 0%, transparent 60%),
+      radial-gradient(ellipse 45% 65% at 15% 75%, rgba(124, 58, 237, 0.09) 0%, transparent 60%);
+  }
+}
+
+/* ------ PARALLAX DO HERO ------ */
+.hero-content,
+.hero-mockup {
+  will-change: transform;
+}
+
+/* ------ EFEITO DE LINHA LUMINOSA (decorativo) ------ */
+.section::after {
+  content: none;
+}
+
+/* Borda inferior luminosa em seções selecionadas */
+.problema::after,
+.gamificacao::after {
+  content: '';
+  display: block;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, rgba(124, 58, 237, 0.3), transparent);
+  margin-top: 80px;
+}
+
+/* ------ HOVER CARDS COM GLOW ------ */
+/* Efeito de glow neon nos cards de problema ao hover */
+.problem-card::after {
+  content: '';
+  position: absolute;
+  inset: -1px;
+  border-radius: inherit;
+  opacity: 0;
+  transition: opacity 0.4s ease;
+  background: linear-gradient(135deg, rgba(124, 58, 237, 0.4), rgba(167, 139, 250, 0.1), transparent);
+  z-index: -1;
+  pointer-events: none;
+  filter: blur(8px);
+}
+
+.problem-card:hover::after {
+  opacity: 1;
+}
+
+/* ------ ANIMAÇÃO DO BADGE "EM DESENVOLVIMENTO" ------ */
+@keyframes hero-badge-shine {
+  0% { background-position: -200% center; }
+  100% { background-position: 200% center; }
+}
+
+.hero-badge {
+  background-size: 200% auto;
+}
+
+/* ------ ANIMAÇÃO DE ENTRADA DA NAVBAR ------ */
+.navbar {
+  animation: nav-drop 0.6s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+}
+
+@keyframes nav-drop {
+  from {
+    opacity: 0;
+    transform: translateY(-20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* ------ ANIMAÇÃO DO TÍTULO DO HERO ------ */
+.hero-title .title-line {
+  opacity: 0;
+  transform: translateY(30px);
+  animation: title-reveal 0.7s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+}
+
+.hero-title .title-line:nth-child(1) { animation-delay: 0.3s; }
+.hero-title .title-line:nth-child(2) { animation-delay: 0.45s; }
+.hero-title .title-line:nth-child(3) { animation-delay: 0.6s; }
+
+@keyframes title-reveal {
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.hero-badge {
+  opacity: 0;
+  animation: fade-in-up 0.6s 0.15s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+}
+
+.hero-subtitle {
+  opacity: 0;
+  animation: fade-in-up 0.6s 0.75s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+}
+
+.xp-counter-block {
+  opacity: 0;
+  animation: fade-in-up 0.6s 0.9s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+}
+
+.hero-actions {
+  opacity: 0;
+  animation: fade-in-up 0.6s 1.05s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+}
+
+.hero-stats {
+  opacity: 0;
+  animation: fade-in-up 0.6s 1.2s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+}
+
+.hero-mockup {
+  opacity: 0;
+  animation: fade-in-right 0.8s 0.4s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+}
+
+@keyframes fade-in-up {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes fade-in-right {
+  from {
+    opacity: 0;
+    transform: translateX(40px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+/* ------ ANIMAÇÃO DOS CARDS DE COMO FUNCIONA ------ */
+.step-card {
+  opacity: 0;
+  transform: translateY(30px);
+}
+
+.step-card.animated {
+  opacity: 1;
+  transform: translateY(0);
+  transition: opacity 0.6s cubic-bezier(0.4, 0, 0.2, 1),
+              transform 0.6s cubic-bezier(0.4, 0, 0.2, 1),
+              border-color 0.3s ease,
+              box-shadow 0.3s ease;
+}
+
+.step-card:nth-child(1).animated { transition-delay: 0.05s; }
+.step-card:nth-child(2).animated { transition-delay: 0.15s; }
+.step-card:nth-child(3).animated { transition-delay: 0.25s; }
+.step-card:nth-child(4).animated { transition-delay: 0.35s; }
+
+/* ------ ANIMAÇÃO DOS CARDS DE PROBLEMA ------ */
+.problem-card {
+  opacity: 0;
+  transform: translateY(30px);
+}
+
+.problem-card.animated {
+  opacity: 1;
+  transform: translateY(0);
+  transition: opacity 0.6s cubic-bezier(0.4, 0, 0.2, 1),
+              transform 0.6s cubic-bezier(0.4, 0, 0.2, 1),
+              border-color 0.3s ease,
+              box-shadow 0.3s ease;
+}
+
+/* O card featured fica um pouco acima (CSS style.css cuida do scale) */
+.card-featured.animated {
+  transform: scale(1.04);
+}
+
+.problem-card:nth-child(1).animated { transition-delay: 0.05s; }
+.problem-card:nth-child(2).animated { transition-delay: 0.15s; }
+.problem-card:nth-child(3).animated { transition-delay: 0.25s; }
+
+/* ------ ANIMAÇÃO DOS BADGES ------ */
+.badge-item {
+  opacity: 0;
+  transform: scale(0.8);
+  transition: opacity 0.4s ease, transform 0.4s ease;
+}
+
+.badge-item.animated {
+  opacity: 0.45;
+  transform: scale(1);
+}
+
+.badge-item.badge-earned.animated {
+  opacity: 1;
+}
+
+.badge-item:nth-child(1) { transition-delay: 0.05s; }
+.badge-item:nth-child(2) { transition-delay: 0.1s; }
+.badge-item:nth-child(3) { transition-delay: 0.15s; }
+.badge-item:nth-child(4) { transition-delay: 0.2s; }
+.badge-item:nth-child(5) { transition-delay: 0.25s; }
+.badge-item:nth-child(6) { transition-delay: 0.3s; }
+
+/* ------ EFEITO GLOW PULSANTE NOS BOTÕES PRIMÁRIOS ------ */
+.btn-primary {
+  position: relative;
+  overflow: hidden;
+}
+
+.btn-primary::before {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 0;
+  height: 0;
+  background: rgba(255,255,255,0.2);
+  border-radius: 50%;
+  transform: translate(-50%, -50%);
+  transition: width 0.4s ease, height 0.4s ease, opacity 0.4s ease;
+  pointer-events: none;
+}
+
+.btn-primary:active::before {
+  width: 300px;
+  height: 300px;
+  opacity: 0;
+}
+
+/* ------ SHIMMER EM CARDS FEATURED ------ */
+.card-featured::after {
+  content: '';
+  position: absolute;
+  top: -50%;
+  left: -50%;
+  width: 200%;
+  height: 200%;
+  background: linear-gradient(
+    45deg,
+    transparent 40%,
+    rgba(167, 139, 250, 0.04) 50%,
+    transparent 60%
+  );
+  animation: shimmer 4s ease-in-out infinite;
+  pointer-events: none;
+}
+
+@keyframes shimmer {
+  0% { transform: translateX(-100%) rotate(0deg); }
+  100% { transform: translateX(100%) rotate(0deg); }
+}
+
+/* ------ ANIMAÇÃO DE TEXTO CONTAGEM ------ */
+.count-up {
+  display: inline-block;
+  transition: color 0.3s ease;
+}
+
+/* ------ EFEITO GLITCH NO LOGO (sutil, hover) ------ */
+.nav-logo:hover .logo-text {
+  animation: text-glitch 0.3s step-end;
+}
+
+@keyframes text-glitch {
+  0%, 100% { clip-path: none; transform: none; }
+  25% { clip-path: polygon(0 0, 100% 0, 100% 40%, 0 40%); transform: translateX(-2px); }
+  50% { clip-path: polygon(0 60%, 100% 60%, 100% 100%, 0 100%); transform: translateX(2px); }
+  75% { clip-path: none; transform: translateX(-1px); }
+}
+
+/* ------ SCROLL SUAVE PERSONALIZADO ------ */
+html {
+  scroll-behavior: smooth;
+}
+
+/* ------ ANIMAÇÃO DE ENTRADA DO FORMULÁRIO ------ */
+.cta-form input {
+  opacity: 0;
+  transform: translateY(10px);
+  animation: form-appear 0.5s ease forwards;
+}
+
+.cta-form input:nth-child(1) { animation-delay: 0.1s; }
+.cta-form input:nth-child(2) { animation-delay: 0.2s; }
+
+@keyframes form-appear {
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* ------ ANIMAÇÃO DO RANKING (live indicator) ------ */
+.rp-title {
+  position: relative;
+}
+
+.rp-title::before {
+  content: '';
+  display: inline-block;
+  width: 6px;
+  height: 6px;
+  background: #ef4444;
+  border-radius: 50%;
+  margin-right: 6px;
+  animation: live-pulse 1.5s ease-in-out infinite;
+  vertical-align: middle;
+}
+
+@keyframes live-pulse {
+  0%, 100% { opacity: 1; transform: scale(1); }
+  50% { opacity: 0.4; transform: scale(0.8); }
+}
+
+/* ------ ANIMAÇÃO DOS STEPS DO ROADMAP ------ */
+.rm-step {
+  opacity: 0;
+  transform: translateY(20px);
+  transition: opacity 0.5s ease, transform 0.5s ease;
+}
+
+.rm-step.animated {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.rm-step:nth-child(1).animated { transition-delay: 0.05s; }
+.rm-step:nth-child(2).animated { transition-delay: 0.15s; }
+.rm-step:nth-child(3).animated { transition-delay: 0.25s; }
+.rm-step:nth-child(4).animated { transition-delay: 0.35s; }
+
+/* ------ TRANSIÇÃO SUAVE ENTRE SEÇÕES (gradient overlap) ------ */
+section {
+  position: relative;
+}
+
+/* ------ EFEITO DE SCANLINE SUTIL (estilo retro-gamer) ------ */
+.phone-screen::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: repeating-linear-gradient(
+    0deg,
+    transparent,
+    transparent 2px,
+    rgba(0,0,0,0.03) 2px,
+    rgba(0,0,0,0.03) 4px
+  );
+  pointer-events: none;
+  z-index: 10;
+}
+
+/* ------ ANIMAÇÃO DO CURSOR DA BARRA DE LIGA ------ */
+@keyframes cursor-bounce {
+  0%, 100% { transform: translate(-50%, -50%) scale(1); }
+  50% { transform: translate(-50%, -50%) scale(1.15); }
+}
+
+.league-progress-cursor {
+  animation: cursor-bounce 2s ease-in-out infinite;
+}
+
+/* ------ PARTÍCULAS: estilos aplicados via JS ------ */
+#particles-canvas {
+  opacity: 0.6;
+}
+
+/* ------ RESPONSIVO: reduzir animações no mobile ------ */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+
+@media (max-width: 640px) {
+  [data-animate="fade-up"],
+  [data-animate="fade-left"],
+  [data-animate="fade-right"] {
+    transition-duration: 0.5s;
+  }
+}

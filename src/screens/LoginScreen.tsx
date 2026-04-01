@@ -1,11 +1,7 @@
-import React from "react";
-import {
-  View,
-  Text,
-  StyleSheet,
-  TextInput,
-  TouchableOpacity,
+import React, { useState } from "react";
+import {View, Text, TextInput, TouchableOpacity, StyleSheet, Alert
 } from "react-native";
+
 import { useNavigation } from "@react-navigation/native";
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
 
@@ -18,98 +14,118 @@ type NavigationProps = NativeStackNavigationProp<
   },
   "Login"
 >;
-
-const navigation = useNavigation<NavigationProps>();
-
-// SVG icons
-import EmailIcon from "../../assets/email.svg";
-import LockIcon from "../../assets/lock.svg";
-import EyeIcon from "../../assets/eye.svg";
-import GoogleIcon from "../../assets/google.svg";
-import AppleIcon from "../../assets/apple.svg";
-import LogoXp from "../../assets/logoxp.svg";
-
+import { signInWithEmailAndPassword } from "firebase/auth";
+import { auth } from "../services/firebaseConfig";
 
 export default function LoginScreen() {
+
+  const navigation = useNavigation<NavigationProps>();
+
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [loading, setLoading] = useState(false);
+
+  const handleLogin = async () => {
+    if (!email || !password) {
+      Alert.alert("Erro", "Por favor, preencha e-mail e senha");
+      return;
+    }
+
+    setLoading(true);
+    try {
+      await signInWithEmailAndPassword(auth, email, password);
+      console.log("Login realizado!");
+      navigation.navigate("Login");
+    } catch (error: any) {
+      console.log("Erro no login:", error);
+      Alert.alert("Erro no Login", error.message || "Falha ao realizar login");
+    } finally {
+      setLoading(false);
+    }
+  };
+
   return (
     <View style={styles.container}>
-
       {/* LOGO */}
-      <LogoXp 
-      width={170} 
-      height={80} 
-      style={styles.logo}
-      />
+      <Text style={styles.logo}>XP Concursos</Text>
 
+      <Text style={styles.title}>Login</Text>
+
+      {/* CARD */}
       <View style={styles.card}>
 
-        {/* EMAIL */}
         <Text style={styles.label}>E-mail</Text>
 
-        <View style={styles.inputContainer}>
-          <EmailIcon width={20} height={20} />
+        <TextInput
+          placeholder="seu@email.com"
+          placeholderTextColor="#8C94A7"
+          style={styles.input}
+          value={email}
+          onChangeText={setEmail}
+          editable={!loading}
+        />
 
-          <TextInput
-            placeholder="seu@email.com"
-            placeholderTextColor="#8A8F9A"
-            style={styles.input}
-          />
-        </View>
-
-        {/* SENHA */}
-        <View style={styles.passwordRow}>
+        <View style={styles.passwordHeader}>
           <Text style={styles.label}>Senha</Text>
-          <Text style={styles.forgot}>Esqueceu a senha?</Text>
+
+          <TouchableOpacity
+            onPress={() => navigation.navigate("RecoverPassword")}
+          >
+            <Text style={styles.link}>Esqueceu a senha?</Text>
+          </TouchableOpacity>
         </View>
 
-        <View style={styles.inputContainer}>
-          <LockIcon width={20} height={20} />
-
-          <TextInput
-            placeholder="Digite sua senha"
-            placeholderTextColor="#8A8F9A"
-            secureTextEntry
-            style={styles.input}
-          />
-
-          <EyeIcon width={20} height={20} />
-        </View>
+        <TextInput
+          placeholder="Digite sua senha"
+          placeholderTextColor="#8C94A7"
+          secureTextEntry
+          style={styles.input}
+          value={password}
+          onChangeText={setPassword}
+          editable={!loading}
+        />
 
         {/* BOTÃO LOGIN */}
-        <TouchableOpacity style={styles.loginButton}>
-          <Text style={styles.loginText}>Entrar</Text>
+
+        <TouchableOpacity
+          style={[styles.button, loading && styles.buttonDisabled]}
+          onPress={handleLogin}
+          disabled={loading}
+        >
+          <Text style={styles.buttonText}>{loading ? "Entrando..." : "Entrar"}</Text>
         </TouchableOpacity>
 
         {/* DIVISOR */}
-        <View style={styles.dividerContainer}>
-          <View style={styles.line} />
-          <Text style={styles.dividerText}>OU CONTINUE COM</Text>
-          <View style={styles.line} />
-        </View>
+
+        <Text style={styles.divider}>OU CONTINUE COM</Text>
 
         {/* GOOGLE */}
-        <TouchableOpacity style={styles.socialButton}>
-          <GoogleIcon width={18} height={18} />
-          <Text style={styles.socialText}> Continue com Google</Text>
+
+        <TouchableOpacity style={styles.socialButton} disabled={loading}>
+          <Text style={styles.socialText}>Continue com Google</Text>
         </TouchableOpacity>
 
         {/* APPLE */}
-        <TouchableOpacity style={styles.socialButton}>
-          <AppleIcon width={18} height={18} />
-          <Text style={styles.socialText}> Continue com Apple</Text>
+
+        <TouchableOpacity style={styles.socialButton} disabled={loading}>
+          <Text style={styles.socialText}>Continue com Apple</Text>
         </TouchableOpacity>
 
       </View>
 
       {/* CADASTRO */}
-      <View style={styles.registerRow}>
-        <Text style={styles.registerText}>Não tem conta?</Text>
-        
-       <TouchableOpacity onPress={() => navigation.navigate("RegisterScreen")}>
-          <Text style={styles.registerLink}> Cadastre-se</Text>
-       </TouchableOpacity>
 
-      </View>
+      <TouchableOpacity
+        onPress={() => navigation.navigate("Register")}
+        disabled={loading}
+      >
+
+        <Text style={styles.register}>
+          Não tem conta? <Text style={styles.registerLink}>Cadastre-se</Text>
+        </Text>
+
+      </TouchableOpacity>
+
     </View>
   );
 }
@@ -118,120 +134,103 @@ const styles = StyleSheet.create({
 
   container: {
     flex: 1,
-    backgroundColor: "#0B0D17",
-    alignItems: "center",
-    paddingTop: 120,
+    backgroundColor: "#070B1A",
+    justifyContent: "center",
+    padding: 25
+  },
+
+  logo: {
+    color: "white",
+    fontSize: 26,
+    textAlign: "center",
+    marginBottom: 10,
+    fontWeight: "bold"
   },
 
   title: {
     color: "white",
-    fontSize: 24,
-    fontWeight: "600",
-    marginBottom: 20,
+    fontSize: 28,
+    textAlign: "center",
+    marginBottom: 25
   },
 
   card: {
-    width: "85%",
-    backgroundColor: "#15182B",
+    backgroundColor: "#141833",
     borderRadius: 20,
-    padding: 20,
+    padding: 20
   },
 
   label: {
-    color: "#BFC5D2",
-    marginBottom: 6,
-    fontSize: 13,
-  },
-
-  inputContainer: {
-    flexDirection: "row",
-    alignItems: "center",
-    backgroundColor: "#2A2F3C",
-    borderRadius: 10,
-    paddingHorizontal: 12,
-    height: 48,
-    marginBottom: 15,
-    gap: 8,
+    color: "#B8C1D1",
+    marginBottom: 6
   },
 
   input: {
-    flex: 1,
+    backgroundColor: "#2A3142",
+    height: 50,
+    borderRadius: 10,
+    paddingHorizontal: 15,
     color: "white",
+    marginBottom: 15
   },
 
-  passwordRow: {
+  passwordHeader: {
     flexDirection: "row",
     justifyContent: "space-between",
+    alignItems: "center"
   },
 
-  forgot: {
-    color: "#8B5CF6",
-    fontSize: 12,
+  link: {
+    color: "#8B5CF6"
   },
 
-  loginButton: {
-    marginTop: 10,
+  button: {
     backgroundColor: "#7C3AED",
-    height: 48,
+    height: 50,
     borderRadius: 12,
     justifyContent: "center",
     alignItems: "center",
+    marginTop: 5
   },
 
-  loginText: {
+  buttonDisabled: {
+    opacity: 0.6
+  },
+
+  buttonText: {
     color: "white",
-    fontWeight: "600",
-    fontSize: 16,
+    fontWeight: "bold",
+    fontSize: 16
   },
 
-  dividerContainer: {
-    flexDirection: "row",
-    alignItems: "center",
-    marginVertical: 20,
-  },
-
-  dividerText: {
-    color: "#6B7280",
-    fontSize: 12,
-    marginHorizontal: 10,
-  },
-
-  line: {
-    flex: 1,
-    height: 1,
-    backgroundColor: "#2F3445",
+  divider: {
+    textAlign: "center",
+    color: "#8C94A7",
+    marginVertical: 18,
+    fontSize: 12
   },
 
   socialButton: {
-    height: 44,
-    backgroundColor: "#2A2F3C",
+    backgroundColor: "#2A3142",
+    height: 45,
     borderRadius: 10,
     justifyContent: "center",
     alignItems: "center",
-    flexDirection: "row",
-    marginBottom: 10,
+    marginBottom: 10
   },
 
   socialText: {
-    color: "white",
+    color: "white"
   },
 
-  registerRow: {
-    flexDirection: "row",
-    marginTop: 20,
-  },
-
-  registerText: {
-    color: "#BFC5D2",
+  register: {
+    color: "#B8C1D1",
+    textAlign: "center",
+    marginTop: 25
   },
 
   registerLink: {
-    color: "#8B5CF6",
-    fontWeight: "600",
-  },
-
-  logo: {
-    marginBottom: 30,
-  },
+    color: "#8B5CF6"
+  }
 
 });

@@ -2,6 +2,9 @@ import React, { useState } from "react";
 import { View, Text, TextInput, TouchableOpacity, StyleSheet } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
+import { Alert } from "react-native";
+import { sendPasswordResetEmail } from "firebase/auth";
+import { auth } from "../services/firebaseConfig";
 import LogoXP from "../../assets/logoxp.svg";
 import EmailIcon from "../../assets/email.svg";
 
@@ -16,7 +19,25 @@ export default function RecoverPasswordScreen() {
 
   const navigation = useNavigation<NavigationProps>();
   const [email, setEmail] = useState("");
+  const [loading, setLoading] = useState(false);
 
+async function handleForgotPassword() {
+  if (loading) return;
+  setLoading(true);
+
+  try {
+    setLoading(true);
+
+    await sendPasswordResetEmail(auth, email);
+
+    alert("E-mail de recuperação enviado!");
+    navigation.navigate("Login");
+  } catch (error: any) {
+    alert("Erro ao enviar e-mail: " + error.message);
+  } finally {
+    setLoading(false);
+  }
+}
   return (
     <View style={styles.container}>
 
@@ -42,8 +63,9 @@ export default function RecoverPasswordScreen() {
         </View>
 
         <TouchableOpacity
-          style={styles.button}
-          onPress={() => navigation.navigate("UpdatePassword")}
+          style={[styles.button, loading && { opacity: 0.3 }]}
+          onPress={handleForgotPassword}
+          disabled={loading}
         >
           <Text style={styles.buttonText}>Continuar</Text>
         </TouchableOpacity>

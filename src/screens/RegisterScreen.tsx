@@ -55,7 +55,7 @@ export default function RegisterScreen() {
 
       <View style={styles.card}>
 
-        <Text style={styles.label}>Nome Completo</Text>
+        <Text style={styles.label}>Nome de Usuário</Text>
 
         <View style={styles.inputWrapper}>
           <EmailIcon width={18} height={18} style={styles.inputIcon} />

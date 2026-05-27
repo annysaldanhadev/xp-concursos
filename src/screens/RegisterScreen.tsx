@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { View, Text, TextInput, TouchableOpacity, StyleSheet } from "react-native";
+import { View, Text, TextInput, TouchableOpacity, StyleSheet, Alert } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 import { auth } from "../services/firebaseConfig";
 import { createUserWithEmailAndPassword } from "firebase/auth";
@@ -34,10 +34,13 @@ export default function RegisterScreen() {
 
       navigation.navigate("Login" as never);
 
-    } catch (error) {
+    } catch (error: any) {
       console.log(error);
-    }
 
+    if (error.code === "auth/email-already-in-use") {
+  Alert.alert("Erro", "Esse email já está cadastrado.");
+  }
+}
   };
 
   return (

@@ -25,7 +25,7 @@ Pensa num Gym Rats, mas para quem está se preparando para concursos públicos.
 
 ```bash
 # Clone o repositório
-git clone https://github.com/annysaldanha/xp-concursos.git
+git clone https://github.com/annysaldanhadev/xp-concursos.git
 cd xp-concursos
 
 # Instale as dependências
